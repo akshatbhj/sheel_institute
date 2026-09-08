@@ -52,10 +52,7 @@ export default function Navbar() {
               />
             </Link>
 
-            <Link
-              to="/"
-              className="hidden shrink-0 flex-col justify-center sm:flex"
-            >
+            <Link to="/" className="flex shrink-0 flex-col justify-center">
               <span className="mb-1 whitespace-nowrap text-base font-extrabold leading-none tracking-tight text-[#003380] md:text-lg">
                 Sheel Institute
               </span>
