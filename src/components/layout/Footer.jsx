@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { Lock } from "lucide-react";
 import logo from "../../assets/sheel_logo.png";
 import {
   Location01Icon,
@@ -275,18 +276,27 @@ export default function Footer() {
           </div>
         </div>
 
+        {/* Bottom Bar with Prominent Admin Login Capsule */}
         <div className="mt-12 pt-8 border-t border-slate-900 text-sm flex flex-col md:flex-row justify-between items-center text-slate-500 space-y-4 md:space-y-0">
           <p>
             © {new Date().getFullYear()} Sheel Institute, Haridwar. All Rights
             Reserved.
           </p>
-          <div className="flex items-center space-x-6 text-xs">
-            <Link to="/admin" className="hover:text-amber-400 transition">
-              Admin Login
+
+          <div className="flex items-center space-x-4 sm:space-x-6 text-xs">
+            {/* Prominent Admin Pill */}
+            <Link
+              to="/admin"
+              className="group inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-900/90 hover:bg-blue-600/15 border border-slate-800 hover:border-blue-500/50 text-slate-300 hover:text-blue-400 font-medium transition-all shadow-sm active:scale-95"
+            >
+              <Lock className="w-3 h-3 text-blue-400 group-hover:text-blue-300 transition-colors" />
+              <span>Admin Login</span>
             </Link>
+
             <a
               href="https://www.thecraftsync.com/"
               target="_blank"
+              rel="noreferrer"
               className="hover:text-amber-400 transition"
             >
               Developed by CraftSync

@@ -1,282 +1,192 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
-
 import {
   Menu01Icon,
   Cancel01Icon,
   ArrowUpRight01Icon,
 } from "@hugeicons/core-free-icons";
-
 import Icon from "../icons/Icon";
-
 import logo from "../../assets/sheel_logo.png";
-import tally from "../../assets/partner_11.jpg";
-import tallyCertified from "../../assets/partner_10.jpg";
+// import tally from "../../assets/partner_11.jpg";
+// import tallyCertified from "../../assets/partner_10.jpg";
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
   const location = useLocation();
 
-  const isActive = (path) =>
-    location.pathname === path
-      ? "text-blue-700 font-bold whitespace-nowrap"
-      : "text-slate-600 hover:text-blue-700 font-medium transition whitespace-nowrap";
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 20);
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   const closeMenu = () => setIsMenuOpen(false);
 
-  const mobileNavLinks = [
+  const navLinks = [
     { to: "/", label: "Home" },
     { to: "/about", label: "About Us" },
     { to: "/courses", label: "Courses" },
     { to: "/facilities", label: "Facilities" },
     { to: "/gallery", label: "Gallery" },
     { to: "/e-learning", label: "E-Learning" },
-    { to: "/contact", label: "Contact Us" },
+    { to: "/contact", label: "Contact" },
   ];
 
   return (
-    <nav className="sticky top-0 z-50 bg-white shadow-sm">
-      <div className="mx-auto max-w-screen-2xl px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between gap-4 py-4">
-          {/* Brand Section */}
-          <div className="flex min-w-0 shrink-0 items-center gap-3">
+    <header className="fixed inset-x-0 top-0 z-50 pt-3 sm:pt-4 px-4 sm:px-6 lg:px-8 pointer-events-none">
+      <div className="mx-auto max-w-7xl">
+        {/* Floating Rounded Island with Glass Transparency on Scroll */}
+        <div
+          className={`pointer-events-auto flex items-center justify-between gap-4 px-4 sm:px-6 py-2.5 rounded-xl transition-all duration-300 ${
+            isScrolled
+              ? "bg-slate-950/40 backdrop-blur-xl border border-white/10 shadow-2xl shadow-black/40"
+              : "bg-slate-900/60 backdrop-blur-md border border-slate-800/50 shadow-xl shadow-black/30"
+          }`}
+        >
+          {/* Brand Identity */}
+          <div className="flex items-center gap-4">
             <Link
               to="/"
-              className="shrink-0"
+              className="flex items-center gap-3 group"
               aria-label="Sheel Institute - Home"
             >
               <img
                 src={logo}
-                alt="Sheel Institute Logo"
-                className="h-10 w-auto md:h-12"
+                alt="Sheel Institute"
+                className="h-9 w-auto object-contain transition-transform duration-300 group-hover:scale-105"
+                width="36"
+                height="36"
               />
+
+              <div className="flex flex-col">
+                <span className="text-base font-bold tracking-tight text-white group-hover:text-blue-400 transition-colors leading-none">
+                  Sheel Institute
+                </span>
+                <span className="text-[8px] font-medium tracking-wider uppercase text-slate-400 mt-1 leading-none">
+                  A Landmark for Professional Education
+                </span>
+              </div>
             </Link>
 
-            <Link to="/" className="flex shrink-0 flex-col justify-center">
-              <span className="mb-1 whitespace-nowrap text-base font-extrabold leading-none tracking-tight text-[#003380] md:text-lg">
-                Sheel Institute
+            {/* Subtle Tally Affiliation Badge (Wide Screens)
+            <div className="hidden 2xl:flex items-center gap-2 border-l border-slate-800 pl-4 py-0.5">
+              <span className="text-[10px] uppercase font-semibold tracking-wider text-slate-400">
+                Partner
               </span>
-
-              <span className="whitespace-nowrap text-[10px] font-bold leading-none tracking-wide text-[#e60000] md:text-[11px]">
-                A Landmark for Professional Education
-              </span>
-            </Link>
-
-            {/* Tally Partner Logos */}
-            <div className="ml-3 hidden shrink-0 items-center gap-3 border-l border-slate-200 pl-4 2xl:flex">
-              <img
-                src={tally}
-                alt="Tally Partner"
-                className="h-9 w-auto"
-                loading="lazy"
-                decoding="async"
-              />
-
-              <img
-                src={tallyCertified}
-                alt="Tally Learning"
-                className="h-9 w-auto"
-                loading="lazy"
-                decoding="async"
-              />
-            </div>
+              <div className="flex items-center gap-1.5 px-2 py-0.5 rounded bg-white">
+                <img
+                  src={tally}
+                  alt="Tally Partner"
+                  className="h-3.5 w-auto object-contain mix-blend-multiply"
+                />
+                <div className="w-[1px] h-3 bg-slate-300" />
+                <img
+                  src={tallyCertified}
+                  alt="Tally Certified"
+                  className="h-3.5 w-auto object-contain mix-blend-multiply"
+                />
+              </div>
+            </div> */}
           </div>
 
-          {/* Desktop Navigation */}
-          <div className="hidden shrink-0 items-center gap-3 xl:flex 2xl:gap-5">
-            <Link to="/" className={isActive("/")}>
-              Home
-            </Link>
+          {/* Desktop Navigation Links */}
+          <nav className="hidden items-center gap-1 xl:flex">
+            {navLinks.map((link) => {
+              const active = location.pathname === link.to;
+              return (
+                <Link
+                  key={link.to}
+                  to={link.to}
+                  className={`px-3 py-1.5 rounded-lg text-xs font-semibold tracking-wide transition-colors duration-150 ${
+                    active
+                      ? "text-white bg-slate-800/60 border border-white/10"
+                      : "text-slate-300 hover:text-white hover:bg-white/5"
+                  }`}
+                >
+                  {link.label}
+                </Link>
+              );
+            })}
 
-            <Link to="/about" className={isActive("/about")}>
-              About Us
-            </Link>
-
-            <Link to="/courses" className={isActive("/courses")}>
-              Courses
-            </Link>
-
-            <Link to="/facilities" className={isActive("/facilities")}>
-              Facilities
-            </Link>
-
-            <Link to="/gallery" className={isActive("/gallery")}>
-              Gallery
-            </Link>
-
-            <Link to="/e-learning" className={isActive("/e-learning")}>
-              E-Learning
-            </Link>
-
-            <Link to="/contact" className={isActive("/contact")}>
-              Contact Us
-            </Link>
-
-            {/* Apply CTA */}
+            {/* Apply Online Button */}
             <Link
               to="/apply"
-              className="
-                group ml-1 inline-flex items-center gap-2
-                whitespace-nowrap rounded-lg
-                bg-amber-500 px-4 py-2
-                font-medium text-white
-                shadow-sm
-                transition-all duration-300
-                hover:-translate-y-0.5
-                hover:bg-amber-600
-                hover:shadow-md
-                xl:px-5 xl:py-2.5
-              "
+              className="ml-2 inline-flex items-center gap-1.5 px-4.5 py-2 rounded-lg bg-blue-600/90 hover:bg-blue-600 text-xs font-bold text-white transition-all duration-200 shadow-md shadow-blue-600/20 active:scale-95"
             >
               <span>Apply Online</span>
-
               <Icon
                 icon={ArrowUpRight01Icon}
-                size={17}
-                strokeWidth={1.8}
+                size={14}
+                strokeWidth={2.2}
                 aria-hidden="true"
-                className="
-                  transition-transform duration-300 ease-out
-                  group-hover:-translate-y-0.5
-                  group-hover:translate-x-0.5
-                "
               />
             </Link>
-          </div>
+          </nav>
 
-          {/* Mobile / Tablet Menu Toggle */}
+          {/* Mobile Menu Toggle */}
           <div className="flex items-center xl:hidden">
             <button
               type="button"
-              onClick={() => setIsMenuOpen((previous) => !previous)}
-              className="
-                group flex h-11 w-11
-                items-center justify-center
-                rounded-xl
-                border border-slate-200
-                bg-white
-                text-slate-700
-                shadow-sm
-                transition-all duration-300 ease-out
-                hover:-translate-y-0.5
-                hover:border-blue-200
-                hover:bg-blue-50
-                hover:text-blue-700
-                hover:shadow-md
-                active:translate-y-0
-                active:scale-95
-              "
-              aria-label={
-                isMenuOpen ? "Close navigation menu" : "Open navigation menu"
-              }
+              onClick={() => setIsMenuOpen((prev) => !prev)}
+              className="p-2 rounded-xl text-slate-400 hover:text-white hover:bg-white/5 border border-white/10 transition-colors"
+              aria-label={isMenuOpen ? "Close menu" : "Open menu"}
               aria-expanded={isMenuOpen}
-              aria-controls="mobile-navigation"
             >
               <Icon
                 icon={isMenuOpen ? Cancel01Icon : Menu01Icon}
-                size={25}
-                strokeWidth={1.8}
+                size={20}
+                strokeWidth={2}
                 aria-hidden="true"
-                className="
-                  transition-transform duration-300 ease-out
-                  group-hover:scale-110
-                "
               />
             </button>
           </div>
         </div>
-      </div>
 
-      {/* Mobile Navigation */}
-      <div
-        id="mobile-navigation"
-        className={`
-          absolute left-0 w-full overflow-hidden
-          border-t border-slate-100
-          bg-white shadow-lg
-          transition-all duration-300 ease-out
-          xl:hidden
-          ${
-            isMenuOpen
-              ? "visible max-h-150 opacity-100"
-              : "invisible max-h-0 opacity-0"
-          }
-        `}
-      >
-        <div className="space-y-1 px-4 pb-6 pt-3">
-          {mobileNavLinks.map((link) => {
-            const active = location.pathname === link.to;
-
-            return (
-              <Link
-                key={link.to}
-                to={link.to}
-                onClick={closeMenu}
-                className={`
-                  flex items-center justify-between
-                  rounded-xl px-4 py-3
-                  text-sm font-medium
-                  transition-all duration-200
-                  ${
-                    active
-                      ? "bg-blue-50 text-blue-700"
-                      : "text-slate-600 hover:bg-slate-50 hover:text-blue-700"
-                  }
-                `}
-              >
-                <span>{link.label}</span>
-
-                <Icon
-                  icon={ArrowUpRight01Icon}
-                  size={17}
-                  strokeWidth={1.8}
-                  aria-hidden="true"
-                  className={`
-                    transition-all duration-200
-                    ${
+        {/* Mobile Floating Drawer */}
+        {isMenuOpen && (
+          <div className="pointer-events-auto mt-2 overflow-hidden rounded-2xl border border-white/10 bg-slate-950/75 backdrop-blur-2xl px-4 pt-3 pb-5 shadow-2xl shadow-black/80 xl:hidden">
+            <div className="flex flex-col space-y-1">
+              {navLinks.map((link) => {
+                const active = location.pathname === link.to;
+                return (
+                  <Link
+                    key={link.to}
+                    to={link.to}
+                    onClick={closeMenu}
+                    className={`flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-medium transition-colors ${
                       active
-                        ? "translate-x-0 text-blue-700"
-                        : "-translate-x-1 opacity-0 group-hover:translate-x-0 group-hover:opacity-100"
-                    }
-                  `}
-                />
-              </Link>
-            );
-          })}
+                        ? "bg-blue-600/20 text-blue-400 border border-blue-500/30"
+                        : "text-slate-300 hover:bg-white/5 hover:text-white"
+                    }`}
+                  >
+                    <span>{link.label}</span>
+                    <Icon
+                      icon={ArrowUpRight01Icon}
+                      size={15}
+                      strokeWidth={2}
+                      className="opacity-40"
+                    />
+                  </Link>
+                );
+              })}
 
-          {/* Mobile CTA */}
-          <Link
-            to="/apply"
-            onClick={closeMenu}
-            className="
-              group mt-4 flex w-full
-              items-center justify-center gap-2
-              rounded-xl
-              bg-amber-500
-              px-5 py-3
-              font-medium text-white
-              shadow-sm
-              transition-all duration-300
-              hover:bg-amber-600
-              hover:shadow-md
-            "
-          >
-            <span>Apply Online</span>
-
-            <Icon
-              icon={ArrowUpRight01Icon}
-              size={18}
-              strokeWidth={1.8}
-              aria-hidden="true"
-              className="
-                transition-transform duration-300
-                group-hover:-translate-y-0.5
-                group-hover:translate-x-0.5
-              "
-            />
-          </Link>
-        </div>
+              <div className="pt-3">
+                <Link
+                  to="/apply"
+                  onClick={closeMenu}
+                  className="flex w-full items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-sm font-semibold text-white transition-colors"
+                >
+                  <span>Apply Online</span>
+                  <Icon icon={ArrowUpRight01Icon} size={16} strokeWidth={2} />
+                </Link>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
-    </nav>
+    </header>
   );
 }

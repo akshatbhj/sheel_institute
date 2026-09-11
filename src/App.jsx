@@ -39,7 +39,7 @@ function App() {
       <ScrollToTop />
 
       <div className="min-h-screen bg-slate-50 font-sans text-slate-900 flex flex-col relative">
-        <Topbar />
+        {/* <Topbar /> */}
         <Navbar />
 
         <main className="grow">
